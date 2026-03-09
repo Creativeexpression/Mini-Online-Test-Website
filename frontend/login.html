@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Online Test System{% endblock %}
+
+{% block extra_css %}
+<style>
+    .login-container {
+        max-width: 400px;
+        margin: 50px auto;
+    }
+    
+    .login-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .login-header h2 {
+        color: #333;
+        font-size: 28px;
+        margin-bottom: 10px;
+    }
+    
+    .login-header p {
+        color: #666;
+    }
+    
+    .role-selector {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+    
+    .role-option {
+        flex: 1;
+        position: relative;
+    }
+    
+    .role-option input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+    }
+    
+    .role-option label {
+        display: block;
+        padding: 15px;
+        text-align: center;
+        border: 2px solid #e0e0e0;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-weight: 600;
+    }
+    
+    .role-option input[type="radio"]:checked + label {
+        border-color: #667eea;
+        background: #667eea;
+        color: white;
+    }
+    
+    .role-option label:hover {
+        border-color: #667eea;
+    }
+    
+    .register-link {
+        text-align: center;
+        margin-top: 20px;
+    }
+    
+    .register-link a {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 600;
+    }
+    
+    .register-link a:hover {
+        text-decoration: underline;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="card">
+        <div class="login-header">
+            <h2>Online Test System</h2>
+            <p>Login to your account</p>
+        </div>
+        
+        <form method="POST" action="{{ url_for('login') }}">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required placeholder="Enter your email">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required placeholder="Enter your password">
+            </div>
+            
+            <div class="form-group">
+                <label>Select Role</label>
+                <div class="role-selector">
+                    <div class="role-option">
+                        <input type="radio" id="student" name="role" value="student" required>
+                        <label for="student">Student</label>
+                    </div>
+                    <div class="role-option">
+                        <input type="radio" id="examiner" name="role" value="examiner">
+                        <label for="examiner">Examiner</label>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+        </form>
+        
+        <div class="register-link">
+            <p>Don't have an account? <a href="{{ url_for('register') }}">Register here</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
