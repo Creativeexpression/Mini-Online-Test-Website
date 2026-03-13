@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard | Name</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-light">
+    <nav class="navbar">
+        <div class="container nav-content">
+            <h1 class="logo"><i class="fas fa-eye"></i> Name</h1>
+            <div class="user-info">
+                <span>Welcome, <strong id="student-name">{{ user.username }}</strong></span>
+                <a href="/logout" class="btn btn-outline-danger btn-sm">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container py-4">
+        <header class="dashboard-header">
+            <h2>Available Examinations</h2>
+            <p class="text-muted">Ensure your camera and microphone are functional before starting.</p>
+        </header>
+
+        <section class="test-grid" id="exam-list">
+            {% for exam in exams %}
+            <div class="card test-card">
+                <div class="card-body">
+                    <div class="icon-box">
+                        <i class="fas fa-file-signature"></i>
+                    </div>
+                    <h3>{{ exam.title }}</h3>
+                    <p class="meta-info">
+                        <span><i class="far fa-clock"></i> {{ exam.duration }} Mins</span>
+                        <span><i class="fas fa-list-ol"></i> {{ exam.total_questions }} Qs</span>
+                    </p>
+                    <div class="status-badge {% if exam.completed %}completed{% endif %}">
+                        {% if exam.completed %} Completed {% else %} Pending {% endif %}
+                    </div>
+                    {% if not exam.completed %}
+                    <button class="btn btn-primary btn-block start-btn" onclick="checkHardware('{{ exam.id }}')">
+                        Start Examination
+                    </button>
+                    {% else %}
+                    <button class="btn btn-secondary btn-block" disabled>Results Submitted</button>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </section>
+    </main>
+
+    <div id="cameraModal" class="modal">
+        <div class="modal-content">
+            <h3>Hardware Check</h3>
+            <p>We need to verify your webcam for the AI Invigilator.</p>
+            <video id="preview" autoplay muted playsinline></video>
+            <div class="modal-actions">
+                <button id="cancelCheck" class="btn btn-light">Cancel</button>
+                <button id="confirmStart" class="btn btn-success" disabled>Proceed to Test</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+</body>
+</html>
+
