@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AI Invigilator - Teacher Dashboard</title>
+
+<link rel="stylesheet" href="css/teacher_dashboard.css">
+
+</head>
+
+<body>
+
+<!-- Sidebar -->
+
+<div class="sidebar">
+
+<h2>AI Invigilator</h2>
+
+<a href="#">Dashboard</a>
+<a href="#">Create Test</a>
+<a href="#">Manage Tests</a>
+<a href="#">Live Monitoring</a>
+<a href="#">Students</a>
+<a href="#">AI Reports</a>
+<a href="#">Security Logs</a>
+
+</div>
+
+<!-- Main Content -->
+
+<div class="main">
+
+<!-- Header -->
+
+<div class="header">
+
+<h1>Teacher Control Center</h1>
+<input placeholder="Search students">
+
+</div>
+
+<!-- Statistics Section -->
+
+<div class="cards">
+
+<div class="card">
+<h3>Active Exams</h3>
+<p id="activeExams">Loading...</p>
+</div>
+
+<div class="card">
+<h3>Students Appeared</h3>
+<p id="studentsAppeared">Loading...</p>
+</div>
+
+<div class="card">
+<h3>AI Alerts</h3>
+<p id="aiAlerts">Loading...</p>
+</div>
+
+<div class="card">
+<h3>AI Accuracy</h3>
+<p id="aiAccuracy">Loading...</p>
+</div>
+
+</div>
+
+<!-- Create Test -->
+
+<div class="card">
+
+<h3>Create New Test</h3>
+
+<input id="testName" placeholder="Test Name">
+<input id="testDuration" placeholder="Duration (minutes)">
+
+<button onclick="createTest()">Create</button>
+
+</div>
+
+<!-- Tests Management -->
+
+<div class="card">
+
+<h3>Tests Management</h3>
+
+<table>
+
+<thead>
+
+<tr>
+<th>Test Name</th>
+<th>Duration</th>
+<th>Actions</th>
+</tr>
+
+</thead>
+
+<tbody id="testTable">
+
+<tr>
+<td colspan="3" style="text-align:center;">Loading tests...</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+<!-- Student Monitoring -->
+
+<div class="card">
+
+<h3>Student Progress</h3>
+
+<table>
+
+<thead>
+
+<tr>
+<th>Name</th>
+<th>Status</th>
+<th>Progress</th>
+<th>Risk</th>
+</tr>
+
+</thead>
+
+<tbody id="studentTable">
+
+<tr>
+<td colspan="4" style="text-align:center;">Loading student data...</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+<!-- Live Webcam Monitoring -->
+
+<div class="card">
+
+<h3>Live Webcam Monitoring</h3>
+
+<div class="webcam-grid" id="webcamGrid">
+
+<div class="cam">Loading cameras...</div>
+
+</div>
+
+</div>
+
+<!-- AI Alerts -->
+
+<div class="alert-panel">
+
+<h3>AI Suspicious Activity</h3>
+
+<ul id="alerts">
+
+<li>Loading AI monitoring data...</li>
+
+</ul>
+
+</div>
+
+</div>
+
+<script>
+
+/* Create Test Placeholder */
+
+function createTest(){
+
+let name=document.getElementById("testName").value
+let duration=document.getElementById("testDuration").value
+
+if(name=="" || duration=="") return
+
+let table=document.getElementById("testTable")
+
+let row=document.createElement("tr")
+
+row.innerHTML=
+`
+<td>${name}</td>
+<td>${duration} min</td>
+<td><button onclick="deleteTest(this)">Delete</button></td>
+`
+
+table.appendChild(row)
+
+}
+
+/* Delete Test */
+
+function deleteTest(btn){
+btn.parentElement.parentElement.remove()
+}
+
+</script>
+
+</body>
+
+</html>
