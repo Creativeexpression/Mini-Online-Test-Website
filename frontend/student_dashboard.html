@@ -1,70 +1,230 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Dashboard | Name</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <title>Student Dashboard | Secure Portal</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <link rel="stylesheet" href="css/student_dashboard.css">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
 </head>
-<body class="bg-light">
+
+<body class="dashboard-body">
+
+    <canvas id="particles"></canvas>
+
     <nav class="navbar">
-        <div class="container nav-content">
-            <h1 class="logo"><i class="fas fa-eye"></i> Name</h1>
-            <div class="user-info">
-                <span>Welcome, <strong id="student-name">{{ user.username }}</strong></span>
-                <a href="/logout" class="btn btn-outline-danger btn-sm">Logout</a>
+        
+        <div class="container nav-content" style="justify-content: flex-end;">
+
+        <div class="nav-controls">
+            <div class="notification-wrapper" id="notifTrigger">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge"></span>
             </div>
         </div>
-    </nav>
 
-    <main class="container py-4">
-        <header class="dashboard-header">
-            <h2>Available Examinations</h2>
-            <p class="text-muted">Ensure your camera and microphone are functional before starting.</p>
-        </header>
-
-        <section class="test-grid" id="exam-list">
-            {% for exam in exams %}
-            <div class="card test-card">
-                <div class="card-body">
-                    <div class="icon-box">
-                        <i class="fas fa-file-signature"></i>
-                    </div>
-                    <h3>{{ exam.title }}</h3>
-                    <p class="meta-info">
-                        <span><i class="far fa-clock"></i> {{ exam.duration }} Mins</span>
-                        <span><i class="fas fa-list-ol"></i> {{ exam.total_questions }} Qs</span>
-                    </p>
-                    <div class="status-badge {% if exam.completed %}completed{% endif %}">
-                        {% if exam.completed %} Completed {% else %} Pending {% endif %}
-                    </div>
-                    {% if not exam.completed %}
-                    <button class="btn btn-primary btn-block start-btn" onclick="checkHardware('{{ exam.id }}')">
-                        Start Examination
-                    </button>
-                    {% else %}
-                    <button class="btn btn-secondary btn-block" disabled>Results Submitted</button>
-                    {% endif %}
+        <div class="notif-sidebar" id="notifSidebar">
+            <div class="sidebar-header">
+                <h3><i class="fas fa-satellite-dish"></i> NOTIFICATIONS</h3>
+                <button id="closeNotif"><i class="fas fa-times"></i></button>
+        </div>
+    
+        <div class="sidebar-content">
+            <div class="notif-category">RECENT</div>
+        
+            <div class="notif-item unread">
+                <div class="notif-icon"><i class="fas fa-shield-alt"></i></div>
+                <div class="notif-text">
+                    <p>AI Proctoring Engine updated to v3.2</p>
+                    <span>Just now</span>
                 </div>
             </div>
-            {% endfor %}
-        </section>
-    </main>
 
-    <div id="cameraModal" class="modal">
-        <div class="modal-content">
-            <h3>Hardware Check</h3>
-            <p>We need to verify your webcam for the AI Invigilator.</p>
-            <video id="preview" autoplay muted playsinline></video>
-            <div class="modal-actions">
-                <button id="cancelCheck" class="btn btn-light">Cancel</button>
-                <button id="confirmStart" class="btn btn-success" disabled>Proceed to Test</button>
+            <div class="notif-item unread">
+                <div class="notif-icon"><i class="fas fa-file-invoice"></i></div>
+                <div class="notif-text">
+                    <p>New Assessment: "Advanced Cryptography" is now live.</p>
+                    <span>2 hours ago</span>
+                </div>
+            </div>
+
+            <div class="notif-category">EARLIER</div>
+        
+            <div class="notif-item">
+                <div class="notif-icon"><i class="fas fa-check-circle"></i></div>
+                <div class="notif-text">
+                    <p>Data Structures Final results verified.</p>
+                    <span>Yesterday</span>
+                </div>
             </div>
         </div>
     </div>
 
-    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+            <div class="profile-section">
+
+                <div class="profile-circle" id="profileTrigger">
+
+                    <span id="profile-initial">S</span>
+
+                </div>
+
+                <div class="profile-dropdown" id="profileMenu">
+
+                    <div class="dropdown-arrow"></div>
+
+                    <a href="#" class="dropdown-item"><i class="fas fa-user-circle"></i> Profile Info
+                    
+                    <a href="#" class="dropdown-item"><i class="fas fa-graduation-cap"></i> My Grades</a>
+
+                    <div class="divider"></div>
+
+                    <a href="#" class="dropdown-item"><i class="fas fa-cog"></i> Settings</a>
+
+                    <div class="divider"></div>
+
+                    <a href="login.html" class="dropdown-item logout-item"><i class="fas fa-power-off"></i> Logout</a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+
+    <main class="container py-4">
+
+        <header class="dashboard-header">
+
+            <div class="header-content">
+
+                <h2 class="welcome-back">Welcome back, <span class="highlight" id="student-name-header">User</span></h2>
+
+            </div>
+
+        </header>
+
+        <section class="test-grid" id="exam-list">
+
+            <div class="card test-card active-test">
+
+                <div class="card-glow"></div>
+
+                <div class="card-body">
+
+                    <div class="card-header">
+
+                        <div class="icon-box"><i class="fas fa-microchip"></i></div>
+
+                        <div class="status-badge pending">Live</div> </div>
+
+                    <h3>AI & Cybersecurity Quiz</h3>
+
+                    <div class="meta-tags">
+
+                        <span><i class="far fa-clock"></i> 60m</span>
+
+                        <span><i class="fas fa-layer-group"></i> 30 Qs</span>
+
+                    </div>
+
+                    <button class="btn btn-primary start-btn" onclick="checkHardware('exam1')">
+
+                        Start </button>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="card test-card completed-card">
+
+                <div class="card-body">
+
+                    <div class="card-header">
+
+                        <div class="icon-box"><i class="fas fa-database"></i></div>
+
+                        </div>
+
+                    <h3>Data Structures Final</h3>
+
+                    <div class="meta-tags">
+
+                        <span><i class="far fa-clock"></i> 90m</span>
+
+                        <span><i class="fas fa-check-circle"></i> 50 Qs</span>
+
+                    </div>
+
+                    <button class="btn btn-completed" disabled>
+
+                        Completed
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <div id="cameraModal" class="modal">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <div class="security-icon"><i class="fas fa-user-shield"></i></div>
+
+                <h3>Identity Verification</h3>
+
+                <p>Ensure your face is clearly visible in the frame</p>
+
+            </div>
+
+            <div class="video-container">
+
+                <video id="preview" autoplay muted playsinline></video>
+
+                <div class="scan-line"></div>
+
+                <div class="corners"></div>
+
+            </div>
+
+            <div class="modal-actions">
+
+                <button id="cancelCheck" class="btn btn-outline">Abort</button>
+
+                <button id="confirmStart" class="btn btn-success" disabled>Initialize Test</button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <script src="js/student_dashboard.js"></script>
+
 </body>
 </html>
-
