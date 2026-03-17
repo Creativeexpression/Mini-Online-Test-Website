@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exam Page</title>
+</head>
+
+<body>
+
+<h2>Online Examination</h2>
+
+<p id="sectionTitle">Section: Loading...</p>
+<p id="progressText">Progress: 0/0</p>
+<p id="timer">10:00</p>
+
+<hr>
+
+<h3 id="questionNumber">Question 0 of 0</h3>
+<p id="questionText">Waiting for questions...</p>
+
+<div id="optionsContainer"></div>
+
+<br>
+
+<button onclick="prevQuestion()">Previous</button>
+<button onclick="markForReview()">Mark Review</button>
+<button onclick="clearResponse()">Clear</button>
+<button onclick="goToUnanswered()">First Unanswered</button>
+<button onclick="nextQuestion()">Next</button>
+
+<hr>
+
+<h3>Sections</h3>
+<div id="sectionContainer"></div>
+
+<hr>
+
+<h3>Questions</h3>
+<div id="questionGrid"></div>
+
+<br>
+
+<button onclick="submitExam()">Submit Exam</button>
+
+<script>
+
+/* STRUCTURE (Backend will replace this) */
+
+let sections = [
+{
+name: "Section 1",
+questions: []
+},
+{
+name: "Section 2",
+questions: []
+}
+]
+
+let currentSection = 0
+let currentQuestion = 0
+
+let answers = JSON.parse(localStorage.getItem("answers")) || {}
+let review = JSON.parse(localStorage.getItem("review")) || {}
+let visited = {}
+
+/* SAVE */
+
+function saveState(){
+localStorage.setItem("answers", JSON.stringify(answers))
+localStorage.setItem("review", JSON.stringify(review))
+}
+
+/* RENDER SECTION */
+
+function renderSection(){
+
+let sec = sections[currentSection]
+
+document.getElementById("sectionTitle").innerText =
+`Section: ${sec.name}`
+
+if(sec.questions.length === 0){
+document.getElementById("questionText").innerText = "No questions available"
+document.getElementById("optionsContainer").innerHTML = ""
+document.getElementById("questionNumber").innerText = "Question 0 of 0"
+updateGrid()
+updateProgress()
+return
+}
+
+renderQuestion()
+}
+
+/* RENDER QUESTION */
+
+function renderQuestion(){
+
+let sec = sections[currentSection]
+let q = sec.questions[currentQuestion]
+
+let key = `${currentSection}_${currentQuestion}`
+
+visited[key] = true
+
+document.getElementById("questionNumber").innerText =
+`Question ${currentQuestion+1} of ${sec.questions.length}`
+
+document.getElementById("questionText").innerText = q.text
+
+let html = ""
+
+q.options.forEach((opt,i)=>{
+
+let checked = answers[key] === i ? "checked" : ""
+
+html += `
+<label>
+<input type="radio" name="option" ${checked} onclick="selectOption(${i})">
+${opt}
+</label><br>
+`
+
+})
+
+document.getElementById("optionsContainer").innerHTML = html
+
+updateGrid()
+updateProgress()
+
+}
+
+/* SELECT */
+
+function selectOption(i){
+let key = `${currentSection}_${currentQuestion}`
+answers[key] = i
+saveState()
+}
+
+/* NAVIGATION */
+
+function nextQuestion(){
+
+let sec = sections[currentSection]
+
+if(currentQuestion < sec.questions.length-1){
+currentQuestion++
+renderQuestion()
+}
+
+}
+
+function prevQuestion(){
+
+if(currentQuestion > 0){
+currentQuestion--
+renderQuestion()
+}
+
+}
+
+/* SECTION SWITCH */
+
+function switchSection(i){
+currentSection = i
+currentQuestion = 0
+renderSection()
+}
+
+/* REVIEW */
+
+function markForReview(){
+let key = `${currentSection}_${currentQuestion}`
+review[key] = true
+saveState()
+updateGrid()
+}
+
+/* CLEAR */
+
+function clearResponse(){
+let key = `${currentSection}_${currentQuestion}`
+delete answers[key]
+saveState()
+renderQuestion()
+}
+
+/* GRID */
+
+function updateGrid(){
+
+let sec = sections[currentSection]
+let html = ""
+
+sec.questions.forEach((q,i)=>{
+
+let key = `${currentSection}_${i}`
+
+let status = ""
+
+if(answers[key] !== undefined) status += "[Answered] "
+if(review[key]) status += "[Review] "
+if(visited[key]) status += "[Visited] "
+
+html += `
+<div>
+<button onclick="jump(${i})">Q${i+1}</button> ${status}
+</div>
+`
+
+})
+
+document.getElementById("questionGrid").innerHTML = html
+
+}
+
+/* JUMP */
+
+function jump(i){
+currentQuestion = i
+renderQuestion()
+}
+
+/* SECTION LIST */
+
+function renderSections(){
+
+let html = ""
+
+sections.forEach((sec,i)=>{
+
+html += `<button onclick="switchSection(${i})">${sec.name}</button> `
+
+})
+
+document.getElementById("sectionContainer").innerHTML = html
+
+}
+
+/* PROGRESS */
+
+function updateProgress(){
+
+let total = 0
+let answeredCount = 0
+
+sections.forEach((sec,si)=>{
+sec.questions.forEach((q,qi)=>{
+let key = `${si}_${qi}`
+total++
+if(answers[key] !== undefined) answeredCount++
+})
+})
+
+document.getElementById("progressText").innerText =
+`Progress: ${answeredCount}/${total}`
+
+}
+
+/* TIMER */
+
+let time = 600
+
+setInterval(()=>{
+
+let min = Math.floor(time/60)
+let sec = time % 60
+
+document.getElementById("timer").innerText = `${min}:${sec}`
+
+time--
+
+if(time <= 0){
+submitExam()
+}
+
+},1000)
+
+/* SUBMIT */
+
+function submitExam(){
+
+let total = 0
+let answeredCount = 0
+
+sections.forEach((sec,si)=>{
+sec.questions.forEach((q,qi)=>{
+let key = `${si}_${qi}`
+total++
+if(answers[key] !== undefined) answeredCount++
+})
+})
+
+let confirmSubmit = confirm(
+`Answered ${answeredCount}/${total}. Submit exam?`
+)
+
+if(confirmSubmit){
+alert("Exam submitted")
+}
+
+}
+
+/* FIRST UNANSWERED */
+
+function goToUnanswered(){
+
+for(let si=0;si<sections.length;si++){
+for(let qi=0;qi<sections[si].questions.length;qi++){
+
+let key = `${si}_${qi}`
+
+if(answers[key] === undefined){
+currentSection = si
+currentQuestion = qi
+renderSection()
+return
+}
+
+}
+}
+
+}
+
+/* SECURITY */
+
+document.addEventListener("visibilitychange", ()=>{
+if(document.hidden){
+alert("Warning: Tab switch detected!")
+}
+})
+
+document.addEventListener("contextmenu", e => e.preventDefault())
+
+/* INIT */
+
+renderSections()
+renderSection()
+
+</script>
+
+</body>
+</html>
