@@ -8,8 +8,8 @@ import os
 app = Flask(__name__)
 CORS(app)
 
-# MySQL configuration using app.config style
-app.config['MYSQL_HOST'] = 'localhost'
+# I have .env file. so i didnt put my password and name yet
+app.config['MYSQL_HOST'] = 'localhost'   
 app.config['MYSQL_USER'] = os.getenv('MYSQL_USER', 'your_db_user')
 app.config['MYSQL_PASSWORD'] = os.getenv('MYSQL_PASSWORD', 'your_secure_password_here')
 app.config['MYSQL_DB'] = os.getenv('MYSQL_DB', 'online_test')
