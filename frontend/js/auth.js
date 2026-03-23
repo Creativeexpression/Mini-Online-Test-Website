@@ -42,3 +42,9 @@ loginBtn.addEventListener("click", () => {
   alert("Login Successful"); 
 });
 
+  // User's exact lines
+  localStorage.setItem("studentName", username);
+  window.location.href = "student_dashboard.html";
+  
+  alert("Login Successful"); 
+});

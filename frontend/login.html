@@ -3,39 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <title>Login Page</title>
-
 <link rel="stylesheet" href="css/login.css">
 </head>
-
 <body>
-
 <canvas id="particles"></canvas>
-
 <div class="login-card">
-
 <h2>Sign In</h2>
-
 <div class="role">
-<button>For Student</button>
+<button class="active">For Student</button>
 <button>For Examiner</button>
 </div>
-
 <div class="input-group">
-<input type="text" placeholder=" ">
-<label>User Name</label>
+<input type="email" placeholder=" " />
+<label>Email</label>
 </div>
-
 <div class="input-group">
-<input type="password" placeholder=" ">
+<input type="password" placeholder=" " />
 <label>Password</label>
 </div>
-
-<button class="login-btn" id="loginBtn">Login</button>
-
+<button class="login-btn">Login</button>
 </div>
-
 <script src="js/particles.js"></script>
 <script src="js/auth.js"></script>
-
 </body>
 </html>

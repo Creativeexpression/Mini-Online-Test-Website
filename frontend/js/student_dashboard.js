@@ -39,7 +39,8 @@ window.onresize = () => { canvas.width = window.innerWidth; canvas.height = wind
 
 /* ---------- UPDATED DASHBOARD LOGIC ---------- */
 document.addEventListener("DOMContentLoaded", () => {
-    const savedName = localStorage.getItem("studentName") || "MODI";
+const studentData = JSON.parse(localStorage.getItem("studentData") || '{}');
+const savedName = studentData.name || "User";
     const headerElement = document.getElementById("student-name-header");
     
     // 1. Typing Effect Logic
