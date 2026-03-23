@@ -1,4 +1,4 @@
-/* ---------- BASIC RESET ---------- */
+
 *{
   margin:0;
   padding:0;
@@ -6,7 +6,7 @@
   font-family:"Poppins",sans-serif;
 }
 
-/* ---------- BODY & BACKGROUND ---------- */
+
 body{
   height:100vh;
   display:flex;
@@ -18,7 +18,7 @@ body{
   position:relative;
 }
 
-/* ---------- ANIMATED GRADIENT BLOBS ---------- */
+
 body::before{
   content:"";
   position:absolute;
@@ -55,7 +55,7 @@ body::after{
   to{transform:translate(-120px,-80px)}
 }
 
-/* ---------- PARTICLE CANVAS ---------- */
+
 canvas{
   position:absolute;
   top:0;
@@ -65,7 +65,7 @@ canvas{
   z-index:0;
 }
 
-/* ---------- HIGHLY POLISHED REGISTER CARD ---------- */
+
 .container {
   position:relative;
   z-index:2;
@@ -86,7 +86,7 @@ canvas{
   transform: translateY(-5px);
 }
 
-/* ---------- ENHANCED TITLE ---------- */
+
 .container h2{
   margin-bottom:30px;
   letter-spacing:1.5px;
@@ -98,7 +98,7 @@ canvas{
   background-clip:text;
 }
 
-/* ---------- ROLE SELECTOR (POLISH) ---------- */
+
 .role {
   display:flex;
   gap:12px;
@@ -133,7 +133,7 @@ canvas{
   font-weight:600;
 }
 
-/* ---------- ULTRA SMOOTH INPUT GROUPS ---------- */
+
 .input-group {
   position:relative;
   margin-bottom:22px;
@@ -183,7 +183,7 @@ canvas{
   color:#00eaff;
 }
 
-/* ---------- ULTRA POLISHED REGISTER BUTTON ---------- */
+
 .container button[type="submit"] {
   position:relative;
   margin-top:20px;
@@ -212,7 +212,7 @@ canvas{
   transform:translateY(-1px);
 }
 
-/* RESPONSIVE POLISH */
+
 @media (max-width:480px) {
   .container {
     width:95vw;
