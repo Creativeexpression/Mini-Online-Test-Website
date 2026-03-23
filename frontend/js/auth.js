@@ -14,7 +14,7 @@ loginBtn.addEventListener("click", () => {
 
 });
 
-/* ---------------- ROLE BUTTON SELECT LOGIC ---------------- */
+
 const roleButtons = document.querySelectorAll(".role button");
 
 roleButtons.forEach(btn => {
@@ -24,7 +24,7 @@ roleButtons.forEach(btn => {
   });
 });
 
-// Add this inside the loginBtn click listener in auth.js
+
 loginBtn.addEventListener("click", () => {
 
   const username = document.querySelector("input[type='text']").value;
@@ -35,14 +35,13 @@ loginBtn.addEventListener("click", () => {
     return;
   }
 
-  // --- ADD THESE TWO LINES ---
-  localStorage.setItem("studentName", username); // Saves the name for the dashboard
-  window.location.href = "student_dashboard.html"; // Redirects to your new file
+  localStorage.setItem("studentName", username);
+  window.location.href = "student_dashboard.html"; 
   
   alert("Login Successful"); 
 });
 
-  // User's exact lines
+
   localStorage.setItem("studentName", username);
   window.location.href = "student_dashboard.html";
   
