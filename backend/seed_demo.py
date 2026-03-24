@@ -4,8 +4,8 @@ from werkzeug.security import generate_password_hash
 
 DB_CONFIG = {
     'host': 'localhost',
-    'user': 'root',
-    'password': 'Shlok@12345',
+    'user': 'user',
+    'password': 'password',
     'auth_plugin': 'mysql_native_password',
     'database': 'online_test'
 }
